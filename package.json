@@ -12,7 +12,7 @@
   "author": "RotCool",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rotten-LKZ/puredb.git"
+    "url": "git+https://github.com/Rotten-LKZ/concisedb.git"
   },
   "main": "dist/index.js",
   "scripts": {
@@ -21,9 +21,9 @@
     "dev": "tsc && node dist/index.js"
   },
   "bugs": {
-    "url": "https://github.com/Rotten-LKZ/puredb/issues"
+    "url": "https://github.com/Rotten-LKZ/concisedb/issues"
   },
-  "homepage": "https://github.com/Rotten-LKZ/puredb#readme",
+  "homepage": "https://github.com/Rotten-LKZ/concisedb#readme",
   "devDependencies": {
     "@antfu/eslint-config": "^0.18.9",
     "@types/node": "^17.0.23",
