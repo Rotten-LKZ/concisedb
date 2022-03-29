@@ -6,3 +6,4 @@ tsconfig.json
 .eslintignore
 .gitignore
 package-lock.json
+webpack.config.js

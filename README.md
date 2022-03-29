@@ -4,15 +4,17 @@ A database library stores JSON file for Node.js.
 
 ## Usage
 
-*You can also use other package manager like yarn and pnpm instead*
-
 1. Install this library
+
+*You can also use other package managers like yarn and pnpm instead*
 
 ```bash
 npm install concisedb
 ```
 
 2. Example code
+
+*This library also supports `TypeScript`*
 
 ```javascript
 const ConciseDb = require('concisedb')
@@ -27,7 +29,6 @@ db.data.test.push(1) // It will update JSON file automatically by using Proxy
 console.log(db.data) // Output: { test: [ 1 ] }
 ```
 
-3. This library also supports `TypeScript`
 ```typescript
 import ConciseDb from 'concisedb'
 import { join } from 'path'
