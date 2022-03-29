@@ -1,0 +1,32 @@
+{
+  "name": "puredb",
+  "version": "0.1.0",
+  "description": "A database library stores JSON file for Node.js with commonjs",
+  "keywords": [
+    "database",
+    "JSON",
+    "db"
+  ],
+  "license": "MIT",
+  "author": "RotCool",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rotten-LKZ/puredb.git"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Rotten-LKZ/puredb/issues"
+  },
+  "homepage": "https://github.com/Rotten-LKZ/puredb#readme",
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.18.9",
+    "@types/node": "^17.0.23",
+    "eslint": "^8.12.0",
+    "typescript": "^4.6.3"
+  }
+}
