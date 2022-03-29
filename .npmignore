@@ -3,4 +3,6 @@
 yarn.lock
 tsconfig.json
 .eslintrc
+.eslintignore
 .gitignore
+package-lock.json
