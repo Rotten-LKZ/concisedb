@@ -1,11 +1,12 @@
 {
-  "name": "puredb",
+  "name": "concisedb",
   "version": "0.1.0",
-  "description": "A database library stores JSON file for Node.js with commonjs",
+  "description": "A database library stores JSON file for Node.js.",
   "keywords": [
     "database",
     "JSON",
-    "db"
+    "db",
+    "local"
   ],
   "license": "MIT",
   "author": "RotCool",

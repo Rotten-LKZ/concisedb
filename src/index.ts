@@ -20,7 +20,7 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
   })
 }
 
-export default class PureDb<T extends object> {
+export default class ConciseDb<T extends object> {
   private readonly filePath: string
   private _data: T
   public data: T
