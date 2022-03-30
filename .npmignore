@@ -1,5 +1,7 @@
 /node_modules
 /src
+/docs
+/.vscode
 yarn.lock
 tsconfig.json
 .eslintrc

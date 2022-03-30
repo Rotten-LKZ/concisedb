@@ -4,6 +4,8 @@ A database library stores JSON file for Node.js.
 
 [Here](https://github.com/Rotten-LKZ/concisedb/blob/main/update.md) is what updated every version if you want to know.
 
+[Document](https://docs.lkzstudio.com/concisedb)
+
 ## Usage
 
 1. Install this library
@@ -22,11 +24,14 @@ npm install concisedb
 const ConciseDb = require('concisedb')
 const path = require('path')
 
+// The third argument is Options for the class. Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
 const db = new ConciseDb(path.join(__dirname, 'db.json'), { test: [] })
 
 db.data.test.push(1) // It will update JSON file automatically by using Proxy
 // So for performance, if you need to change the data many times at once
 // you can use db.getData() to get a copy of data
+// Of course, you can give the class { realtimeUpdate: false } to the third argument
+// to prevent the program from updating the JSON file automatically
 
 console.log(db.data) // Output: { test: [ 1 ] }
 ```
@@ -39,11 +44,14 @@ interface Database {
   test: number[]
 }
 
+// The third argument is Options for the class. Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
 const db = new ConciseDb<Database>(join(__dirname, 'db.json'), { test: [] })
 
 db.data.test.push(1) // It will update JSON file automatically by using Proxy
 // So for performance, if you need to change the data many times at once
 // you can use db.getData() to get a copy of data
+// Of course, you can give the class { realtimeUpdate: false } to the third argument
+// to prevent the program from updating the JSON file automatically
 
 console.log(db.data) // Output: { test: [ 1 ] }
 ```

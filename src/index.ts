@@ -26,29 +26,46 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
   })
 }
 
+/**
+ * The options type for classes
+ */
+interface Options {
+  /** need to update the JSON file after the changes **/
+  realtimeUpdate?: boolean
+}
+
 export default class ConciseDb<T extends object> {
   private readonly filePath: string
+  private readonly realtimeUpdate: boolean
   private _data: T
   public data: T
-  constructor(filePath: string, data?: T) {
+
+  /**
+   * Init this class
+   * @param filePath the path of the JSON file
+   * @param defaultData the default data of the JSON file
+   * @param options Some options of this class
+   */
+  constructor(filePath: string, defaultData?: T, options?: Options) {
     this.filePath = filePath
-    if (data !== undefined && typeof data !== 'object')
+    this.realtimeUpdate = options?.realtimeUpdate || true
+    if (defaultData !== undefined && typeof defaultData !== 'object')
       throw new Error('data is not an object')
     const _con = this.getFileContentSync()
     if (_con === false) {
       // There is no file
-      if (data === undefined)
+      if (defaultData === undefined)
         throw new Error('data is not defined')
       else
-        this._data = data
-      this.write(data)
+        this._data = defaultData
+      this.write(defaultData)
     }
     else {
       // There is a JSON file
-      if (data !== undefined)
+      if (defaultData !== undefined)
         // Notice: the data here will be changed when this._data change because of Object.assign
         // So I recommend not to use data
-        this._data = this.calcDiff(data, _con)
+        this._data = this.calcDiff(defaultData, _con)
       else
         this._data = _con
     }
@@ -74,7 +91,8 @@ export default class ConciseDb<T extends object> {
    */
   private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean {
     Reflect.set(target, props, value, receiver)
-    this.write(this.data)
+    if (this.realtimeUpdate)
+      this.write(this.data)
     return true
   }
 
@@ -102,5 +120,12 @@ export default class ConciseDb<T extends object> {
    */
   public getData(): T {
     return JSON.parse(JSON.stringify(this._data))
+  }
+
+  /**
+   * To update the JSON file manually
+   */
+  public updateFile() {
+    this.write(this._data)
   }
 }
