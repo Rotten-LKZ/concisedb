@@ -30,13 +30,13 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
  * The options type for classes
  */
 interface Options {
-  /** need to update the JSON file after the changes **/
+  /** whether need to update the JSON file after changes **/
   realtimeUpdate?: boolean
 }
 
 export default class ConciseDb<T extends object> {
   private readonly filePath: string
-  private readonly realtimeUpdate: boolean
+  private readonly options: Options
   private _data: T
   public data: T
 
@@ -48,7 +48,7 @@ export default class ConciseDb<T extends object> {
    */
   constructor(filePath: string, defaultData?: T, options?: Options) {
     this.filePath = filePath
-    this.realtimeUpdate = options?.realtimeUpdate || true
+    this.options = options || {}
     if (defaultData !== undefined && typeof defaultData !== 'object')
       throw new Error('data is not an object')
     const _con = this.getFileContentSync()
@@ -91,7 +91,7 @@ export default class ConciseDb<T extends object> {
    */
   private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean {
     Reflect.set(target, props, value, receiver)
-    if (this.realtimeUpdate)
+    if (this.options.realtimeUpdate === true)
       this.write(this.data)
     return true
   }
@@ -129,3 +129,5 @@ export default class ConciseDb<T extends object> {
     this.write(this._data)
   }
 }
+
+export { Options }

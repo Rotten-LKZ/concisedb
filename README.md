@@ -4,7 +4,7 @@ A database library stores JSON file for Node.js.
 
 [Here](https://github.com/Rotten-LKZ/concisedb/blob/main/update.md) is what updated every version if you want to know.
 
-[Document](https://docs.lkzstudio.com/concisedb)
+[API Document](https://docs.lkzstudio.com/concisedb)
 
 ## Usage
 
