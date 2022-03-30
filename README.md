@@ -45,3 +45,7 @@ db.data.test.push(1) // It will update JSON file automatically by using Proxy
 
 console.log(db.data) // Output: { test: [ 1 ] }
 ```
+
+3. Don't worry if you change the type of `T`
+
+  It will be 

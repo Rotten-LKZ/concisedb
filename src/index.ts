@@ -45,9 +45,12 @@ export default class ConciseDb<T extends object> {
     }
     else {
       // There is a JSON file
-      this._data = _con
       if (data !== undefined)
-        this.calcDiff(data)
+        // Notice: the data here will be changed when this._data change because of Object.assign
+        // So I recommend not to use data
+        this._data = this.calcDiff(data, _con)
+      else
+        this._data = _con
     }
     this.data = deepProxy<T>(this._data, this.dataSet.bind(this))
   }
@@ -87,9 +90,10 @@ export default class ConciseDb<T extends object> {
    * To calculate the differences between the current data (saved in the JSON file) and the new data (user input)
    * @param data User input data
    */
-  private calcDiff(data: T) {
-    // Todo
-    return data = JSON.parse(JSON.stringify(data))
+  private calcDiff(data: T, fileContent: T) {
+    const res = Object.assign(data, fileContent)
+    this.write(res)
+    return res
   }
 
   /**
