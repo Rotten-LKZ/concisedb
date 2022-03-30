@@ -2,6 +2,8 @@
 
 A database library stores JSON file for Node.js.
 
+[Here](https://github.com/Rotten-LKZ/concisedb/blob/main/update.md) is what updated every version if you want to know.
+
 ## Usage
 
 1. Install this library
@@ -48,4 +50,10 @@ console.log(db.data) // Output: { test: [ 1 ] }
 
 3. Don't worry if you change the type of `T`
 
-  It will be 
+  The program will automatically update the content of the JSON file
+
+  If the JSON file is exist, the program will compare the content of the JSON file with `data` you give. 
+
+  The exist data of the JSON file will take the place of `data` you give
+
+  and the non-exist data of the JSON file will use the default `data` which you give.
