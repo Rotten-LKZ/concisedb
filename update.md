@@ -3,10 +3,6 @@
 
 This file shows you what updated every version.
 
-## Version 0.1.5 on 2022-03-30
-
-This version is the same as Version 0.1.4.
-
 ## Version 0.1.4 on 2022-03-30
 
 *This version was been deleted because of redundant content*
