@@ -3,7 +3,13 @@
 
 This file shows you what updated every version.
 
-## Version 0.1.3 on 2022-03-30
+## Version 0.1.5 on 2022-03-30
+
+This version is the same as Version 0.1.4.
+
+## Version 0.1.4 on 2022-03-30
+
+*This version was been deleted because of redundant content*
 
 1. Update docs
 2. You can choose whether you need to make the program update the content of JSON file every time you change the value of data
@@ -14,7 +20,9 @@ Complete README.md
 
 *I forgot to complete README.md before updating Version 0.1.1*
 
-## Version 0.1.1 on 2022-03-30
+## Version 0.1.1 on 2022-03-30 
+
+*This version was been deleted because of incomplete content*
 
 1. Use `webpack` (Less storage using)
 2. Fix: `<T>` changes but the JSON file doesn't change
