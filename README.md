@@ -24,7 +24,8 @@ npm install concisedb
 const ConciseDb = require('concisedb')
 const path = require('path')
 
-// The third argument is Options for the class. Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
+// The third argument is Options for the class. 
+// Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
 const db = new ConciseDb(path.join(__dirname, 'db.json'), { test: [] })
 
 db.data.test.push(1) // It will update JSON file automatically by using Proxy
@@ -44,7 +45,8 @@ interface Database {
   test: number[]
 }
 
-// The third argument is Options for the class. Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
+// The third argument is Options for the class. 
+// Access https://docs.lkzstudio.com/concisedb/ if you wanna know what options can change
 const db = new ConciseDb<Database>(join(__dirname, 'db.json'), { test: [] })
 
 db.data.test.push(1) // It will update JSON file automatically by using Proxy
