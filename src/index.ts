@@ -48,7 +48,7 @@ export default class ConciseDb<T extends object> {
    */
   constructor(filePath: string, defaultData?: T, options?: Options) {
     this.filePath = filePath
-    this.options = options || {}
+    this.options = options || { realtimeUpdate: true }
     if (defaultData !== undefined && typeof defaultData !== 'object')
       throw new Error('data is not an object')
     const _con = this.getFileContentSync()
