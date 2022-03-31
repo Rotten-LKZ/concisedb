@@ -3,11 +3,19 @@
 
 This file shows you what updated every version.
 
+## Version 0.1.6 on 2022-03-21
+
+Fix: Default options aren't work normally
+
 ## Version 0.1.5 on 2022-03-21
+
+*This version was been deleted because of an unrepaired bug*
 
 Fix: Default options
 
 ## Version 0.1.4 on 2022-03-20
+
+*This version was been deleted because of an unrepaired bug*
 
 This version is the same as Version 0.1.3.
 
