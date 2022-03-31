@@ -3,9 +3,15 @@
 
 This file shows you what updated every version.
 
+## Version 0.2.1 on 2022-04-01
+
+Fix: delete console.log
+
 ## Version 0.2.0 on 2022-04-01
 
 1. Add API:
+
+  *This version was deleted because of `console.log`*
 
   - You can update the data from JSON file **manually**
   - To update the JSON file manually (For compatibility with previous versions, using `db.updateFile()` or `db.write()` are both okay)

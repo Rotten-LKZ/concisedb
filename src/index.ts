@@ -171,8 +171,6 @@ export default class ConciseDb<T extends object> {
    */
   public write(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      // eslint-disable-next-line no-console
-      console.log(this._data)
       fs.writeFile(this.filePath, JSON.stringify(this._data), (err) => {
         if (err)
           reject(err)
