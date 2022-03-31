@@ -30,7 +30,7 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
  * The options type for classes
  */
 interface Options {
-  /** whether need to update the JSON file after changes **/
+  /** whether need to update the JSON file after changes */
   realtimeUpdate?: boolean
 }
 
@@ -58,18 +58,40 @@ export default class ConciseDb<T extends object> {
         throw new Error('data is not defined')
       else
         this._data = defaultData
-      this.write(defaultData)
+      this.writeSync()
     }
     else {
       // There is a JSON file
-      if (defaultData !== undefined)
+      if (defaultData !== undefined) {
         // Notice: the data here will be changed when this._data change because of Object.assign
         // So I recommend not to use data
         this._data = this.calcDiff(defaultData, _con)
-      else
+        this.writeSync()
+      }
+      else {
         this._data = _con
+      }
     }
     this.data = deepProxy<T>(this._data, this.dataSet.bind(this))
+  }
+
+  private getFileContent(): Promise<T | false> {
+    return new Promise((resolve, reject) => {
+      if (!fs.existsSync(this.filePath))
+        return resolve(false)
+      fs.readFile(this.filePath, { encoding: 'utf-8' }, (err, data) => {
+        if (err) {
+          reject(err)
+        }
+        else {
+          const _con = JSON.parse(data)
+          if (typeof _con !== 'object')
+            reject(new Error('file content is not an object'))
+          else
+            resolve(_con)
+        }
+      })
+    })
   }
 
   /**
@@ -92,26 +114,16 @@ export default class ConciseDb<T extends object> {
   private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean {
     Reflect.set(target, props, value, receiver)
     if (this.options.realtimeUpdate === true)
-      this.write(this.data)
+      this.write()
     return true
-  }
-
-  /**
-   * To write data to the JSON file
-   * @param data data to be written
-   */
-  private write(data: T) {
-    fs.writeFileSync(this.filePath, JSON.stringify(data))
   }
 
   /**
    * To calculate the differences between the current data (saved in the JSON file) and the new data (user input)
    * @param data User input data
    */
-  private calcDiff(data: T, fileContent: T) {
-    const res = Object.assign(data, fileContent)
-    this.write(res)
-    return res
+  private calcDiff(data: T, fileContent: T): T {
+    return Object.assign(data, fileContent)
   }
 
   /**
@@ -123,10 +135,72 @@ export default class ConciseDb<T extends object> {
   }
 
   /**
+   * Update the data from JSON file manually
+   * @returns whether the update is successful
+   */
+  public read(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.getFileContent().then((data) => {
+        if (data !== false) {
+          this.data = data
+          resolve(true)
+        }
+        resolve(false)
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  }
+
+  /**
+   * Update the data from JSON file manually
+   * @returns whether the update is successful
+   */
+  public readSync(): boolean {
+    const _con = this.getFileContentSync()
+    if (_con !== false) {
+      this.data = _con
+      return true
+    }
+    return false
+  }
+
+  /**
+   * To update the JSON file manually
+   * @returns if this function return true, it means the data is updated successfully
+   */
+  public write(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-console
+      console.log(this._data)
+      fs.writeFile(this.filePath, JSON.stringify(this._data), (err) => {
+        if (err)
+          reject(err)
+        else
+          resolve(true)
+      })
+    })
+  }
+
+  /**
    * To update the JSON file manually
    */
-  public updateFile() {
-    this.write(this._data)
+  public writeSync(): void {
+    fs.writeFileSync(this.filePath, JSON.stringify(this._data))
+  }
+
+  /**
+   * To update the JSON file manually
+   */
+  public updateFile(): Promise<boolean> {
+    return this.write()
+  }
+
+  /**
+   * To update the JSON file manually
+   */
+  public updateFileSync(): void {
+    this.writeSync()
   }
 }
 

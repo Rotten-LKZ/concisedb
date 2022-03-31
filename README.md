@@ -8,6 +8,8 @@ A database library stores JSON file for Node.js.
 
 ## Usage
 
+### Basic usage
+
 1. Install this library
 
 *You can also use other package managers like yarn and pnpm instead*
@@ -67,3 +69,52 @@ console.log(db.data) // Output: { test: [ 1 ] }
   The exist data of the JSON file will take the place of `data` you give
 
   and the non-exist data of the JSON file will use the default `data` which you give.
+
+## Advanced usage
+
+### Update the data of JSON file manually
+
+If you change the content of JSON file and you want to get the latest content, use `db.read()` or `db.readSync()` to get the latest content.
+
+```javascript
+const ConciseDb = require('concisedb')
+const path = require('path')
+
+const db = new ConciseDb(path.join(__dirname, 'db.json'), { test: [] })
+
+console.log(db.data)
+// Try changing the content of JSON file
+setTimeout(() => {
+  db.readSync()
+  console.log(db.data)
+}, 5000)
+db.read()
+```
+
+```typescript
+import ConciseDb from 'concisedb'
+import { join } from 'path'
+
+interface Database {
+  test: number[]
+}
+
+const db = new ConciseDb<Database>(join(__dirname, 'db.json'), { test: [] })
+
+console.log(db.data)
+// Try changing the content of JSON file
+setTimeout(() => {
+  db.readSync()
+  console.log(db.data)
+}, 5000)
+```
+
+### Async and Sync APIs
+
+Here are three APIs and they all support Async
+
+- `db.read()` and `db.readSync()`
+- `db.write()` and `db.writeSync()`
+- `db.updateFile()` and `db.updateFileSync()`
+
+*`db.updateFile()` and `db.updateFileSync()` are declared for compatibility. They are the same as `db.write()` and `db.writeSync()`*
