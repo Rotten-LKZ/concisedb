@@ -3,7 +3,13 @@
 
 This file shows you what updated every version.
 
+## Version 0.2.3 on 2022-04-02
+
+Rm: delete the redundant files
+
 ## Version 0.2.2 on 2022-04-02
+
+*This version was deleted because of redundant files*
 
 Fix: the data won't bind Proxy after using `db.read()` or `db.readSync()`
 Add: using jest for unit testing

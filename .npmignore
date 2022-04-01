@@ -1,6 +1,8 @@
 /node_modules
 /src
 /docs
+/test
+/data
 /.github
 yarn.lock
 tsconfig.json
@@ -9,4 +11,5 @@ tsconfig.json
 .gitignore
 package-lock.json
 webpack.config.js
+jest.config.js
 update.md

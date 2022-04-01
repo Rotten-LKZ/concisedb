@@ -21,6 +21,15 @@ declare class ConciseDb<T extends object> {
    */
   constructor(filePath: string, defaultData?: T, options?: Options)
 
+  /**
+   * Use Proxy to rebind the data
+   * @param data data
+   */
+  private updateData(data: T): void
+
+  /**
+   * To get the content of the JSON file
+   */
   private getFileContent(): Promise<T | false>
 
   /**
