@@ -3,15 +3,22 @@
 
 This file shows you what updated every version.
 
+## Version 0.2.2 on 2022-04-02
+
+Fix: the data won't bind Proxy after using `db.read()` or `db.readSync()`
+Add: using jest for unit testing
+
 ## Version 0.2.1 on 2022-04-01
+
+*This version was deleted because of a unrepaired bug*
 
 Fix: delete console.log
 
 ## Version 0.2.0 on 2022-04-01
 
-1. Add API:
+*This version was deleted because of `console.log`*
 
-  *This version was deleted because of `console.log`*
+1. Add API:
 
   - You can update the data from JSON file **manually**
   - To update the JSON file manually (For compatibility with previous versions, using `db.updateFile()` or `db.write()` are both okay)

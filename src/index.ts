@@ -75,6 +75,18 @@ export default class ConciseDb<T extends object> {
     this.data = deepProxy<T>(this._data, this.dataSet.bind(this))
   }
 
+  /**
+   * Use Proxy to rebind the data
+   * @param data data
+   */
+  private updateData(data: T): void {
+    this._data = data
+    this.data = deepProxy<T>(this._data, this.dataSet.bind(this))
+  }
+
+  /**
+   * To get the content of the JSON file
+   */
   private getFileContent(): Promise<T | false> {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(this.filePath))
@@ -142,7 +154,7 @@ export default class ConciseDb<T extends object> {
     return new Promise((resolve, reject) => {
       this.getFileContent().then((data) => {
         if (data !== false) {
-          this.data = data
+          this.updateData(data)
           resolve(true)
         }
         resolve(false)
@@ -159,7 +171,7 @@ export default class ConciseDb<T extends object> {
   public readSync(): boolean {
     const _con = this.getFileContentSync()
     if (_con !== false) {
-      this.data = _con
+      this.updateData(_con)
       return true
     }
     return false
