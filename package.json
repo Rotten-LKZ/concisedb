@@ -20,7 +20,7 @@
     "start": "node dist/index.js",
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development && node dist/index.js",
-    "doc": "typedoc src/index.ts"
+    "docs": "typedoc src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/Rotten-LKZ/concisedb/issues"

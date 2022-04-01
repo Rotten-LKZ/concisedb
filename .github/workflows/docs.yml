@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - docs
+      - docs-v0
 
 jobs:
   build:
@@ -24,13 +24,20 @@ jobs:
 
       - name: 🎉 Build docs
         run: |
-          npm run doc
+          npm run docs
 
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      - name: ✨ Clone & Commit
+        run: |
+          git clone git@github.com:Rotten-LKZ/v0.concisedb.top.git
+          cp -r /docs /v0.concisedb.top
+          cd v0.concisedb.top
+          git config --global user.email Rotten_LKZ@163.com
+          git config --global user.name Rotten-LKZ
+          git add .
+          git commit -m "new docs[updated by bot]" -a
+
+      - name: 📂 Push
+        uses: ad-m/github-push-action@master
         with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          local-dir: ./docs/
-          server-dir: /wwwroot/lkzstudio/docs/concisedb/
+          github_token: ${{ secrets.TOKEN }}
+          branch: main
