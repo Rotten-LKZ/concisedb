@@ -29,4 +29,5 @@ jobs:
       - name: ✨ Push to Codecov
         uses: codecov/codecov-action@v2
         with:
+          directory: ./coverage/
           files: ./coverage/clover.xml
