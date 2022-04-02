@@ -1,0 +1,35 @@
+name: Calc coverage
+
+on:
+  push:
+    branches:
+      - pub
+
+jobs:
+  build:
+    name: 🍳 Calc coverage on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [16.x]
+
+    steps:
+      - name: 🤔 Checkout
+        uses: actions/checkout@v2
+      
+      - name: 🚚 Install dependencies
+        run: |
+          npm install
+
+      - name: 🎉 Build docs
+        run: |
+          npm run test
+
+      - name: 📂 Push to Codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t "$CODECOV_TOKEN" -f ./coverage/clover.xml

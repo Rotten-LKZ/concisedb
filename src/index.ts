@@ -157,7 +157,9 @@ export default class ConciseDb<T extends object> {
           this.updateData(data)
           resolve(true)
         }
-        resolve(false)
+        else {
+          resolve(false)
+        }
       }).catch((err) => {
         reject(err)
       })

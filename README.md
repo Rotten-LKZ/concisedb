@@ -1,5 +1,6 @@
 # concisedb
 
+[![npm version](https://badge.fury.io/js/concisedb.svg)](https://badge.fury.io/js/concisedb)
 [![GitHub Stars](https://badgen.net/github/stars/Rotten-LKZ/concisedb)](https://github.com/Rotten-LKZ/concisedb)
 [![NPM Downloads](https://badgen.net/npm/dt/concisedb)](https://www.npmjs.com/package/concisedb)
 [![License](https://img.shields.io/npm/l/concisedb)](https://github.com/Rotten-LKZ/concisedb/blob/main/LICENSE)
