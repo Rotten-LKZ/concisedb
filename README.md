@@ -1,11 +1,11 @@
 # concisedb
 
 [![npm version](https://badge.fury.io/js/concisedb.svg)](https://badge.fury.io/js/concisedb)
+[![codecov](https://codecov.io/gh/Rotten-LKZ/concisedb/branch/pub/graph/badge.svg?token=6WFQG040FA)](https://codecov.io/gh/Rotten-LKZ/concisedb)
 [![GitHub Stars](https://badgen.net/github/stars/Rotten-LKZ/concisedb)](https://github.com/Rotten-LKZ/concisedb)
 [![NPM Downloads](https://badgen.net/npm/dt/concisedb)](https://www.npmjs.com/package/concisedb)
 [![License](https://img.shields.io/npm/l/concisedb)](https://github.com/Rotten-LKZ/concisedb/blob/main/LICENSE)
 [![Package size](https://img.shields.io/bundlephobia/min/concisedb)](https://www.npmjs.com/package/concisedb)
-[![codecov](https://codecov.io/gh/Rotten-LKZ/concisedb/branch/main/graph/badge.svg?token=6WFQG040FA)](https://codecov.io/gh/Rotten-LKZ/concisedb)
 
 A database library stores JSON file for Node.js.
 
