@@ -7,6 +7,8 @@
 [![License](https://img.shields.io/npm/l/concisedb)](https://github.com/Rotten-LKZ/concisedb/blob/main/LICENSE)
 [![Package size](https://img.shields.io/bundlephobia/min/concisedb)](https://www.npmjs.com/package/concisedb)
 
+[English](https://github.com/Rotten-LKZ/concisedb/blob/main/README.md) | [简体中文](https://github.com/Rotten-LKZ/concisedb/blob/main/README-zh-Hans.md)
+
 A database library stores JSON file for Node.js.
 
 [Here](https://github.com/Rotten-LKZ/concisedb/blob/main/update.md) is what updated every version if you want to know.
@@ -19,7 +21,7 @@ A database library stores JSON file for Node.js.
 
 1. Install this library
 
-*You can also use other package managers like yarn and pnpm instead*
+*You can also use other package managers like `yarn` and `pnpm` instead*
 
 ```bash
 npm install concisedb
@@ -77,9 +79,9 @@ console.log(db.data) // Output: { test: [ 1 ] }
 
   and the non-exist data of the JSON file will use the default `data` which you give.
 
-## Advanced usage
+### Advanced usage
 
-### Update the data of JSON file manually
+#### Update the data of JSON file manually
 
 If you change the content of JSON file and you want to get the latest content, use `db.read()` or `db.readSync()` to get the latest content.
 
