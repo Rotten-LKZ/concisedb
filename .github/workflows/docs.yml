@@ -3,7 +3,7 @@ name: Deploy docs
 on:
   push:
     branches:
-      - docs-v0
+      - docs-v1
 
 jobs:
   build:
@@ -39,9 +39,9 @@ jobs:
         run: |
           git config --global user.name "Rotten-LKZ"
           git config --global user.email "Rotten_LKZ@163.com"
-          git clone git@github.com:Rotten-LKZ/v0.concisedb.top.git
-          cp -r ./docs/* ./v0.concisedb.top
-          cd ./v0.concisedb.top
+          git clone git@github.com:Rotten-LKZ/v1.concisedb.top.git
+          cp -r ./docs/* ./v1.concisedb.top
+          cd ./v1.concisedb.top
           git add .
           git commit -m "docs update[bot]" -a
           git push
