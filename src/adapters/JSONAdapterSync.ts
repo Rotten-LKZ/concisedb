@@ -1,14 +1,10 @@
 import fs from 'fs'
-import { AdapterSync } from '../sync'
+import { AdapterSync } from '..'
 
 /**
  * Options for JSONAdapterSyncOptions
  */
 export interface JSONAdapterSyncOptions {
-  /**
-   * Whether you need realtime update
-   */
-  realtimeUpdate?: boolean
   /**
    * Where you require this adapter to store data
    */

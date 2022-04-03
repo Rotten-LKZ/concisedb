@@ -14,3 +14,5 @@ package-lock.json
 webpack.config.js
 jest.config.js
 update.md
+typedoc.json
+README-zh-Hans.md

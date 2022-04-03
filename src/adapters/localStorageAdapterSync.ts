@@ -1,14 +1,10 @@
 
-import { AdapterSync } from '../sync'
+import { AdapterSync } from '..'
 
 /**
  * Options for localStorageAdapterSync
  */
 export interface LocalStorageAdapterSyncOptions {
-  /**
-   * Whether you need realtime update
-   */
-  realtimeUpdate?: boolean
   /**
    * The key will use when this adapter stores data
    */

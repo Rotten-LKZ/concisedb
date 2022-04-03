@@ -1,6 +1,4 @@
 
-import type { BaseAdapterOptions } from './index'
-
 /**
  * Deep proxy
  * @param obj the object you need to use proxy
@@ -12,7 +10,7 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
     for (const key in obj) {
       if (typeof obj[key] === 'object')
       // @ts-expect-error - no wrong
-        obj[key] = this.deepProxy(obj[key], cb)
+        obj[key] = deepProxy(obj[key], cb)
     }
   }
 
@@ -29,11 +27,9 @@ function deepProxy<T extends object>(obj: T, cb: Function) {
 /**
  * Adapter for synchronous storage
  */
-export abstract class AdapterSync<T extends object, R extends BaseAdapterOptions> {
+export abstract class AdapterSync<T extends object, R> {
   public adapterOptions: R
   constructor(adapterOptions: R) {
-    if (adapterOptions.realtimeUpdate === undefined)
-      adapterOptions.realtimeUpdate = true
     this.adapterOptions = adapterOptions
   }
 
@@ -54,6 +50,7 @@ export abstract class AdapterSync<T extends object, R extends BaseAdapterOptions
 }
 
 export class ConciseDbSync<T extends object> {
+  private readonly realtimeUpdate: boolean
   private readonly adapter: AdapterSync<T, any>
   private _data: T
   public data!: T
@@ -62,8 +59,10 @@ export class ConciseDbSync<T extends object> {
    * Init ConciseDbSync
    * @param adapter Adapter
    * @param defaultData Default data
+   * @param realtimeUpdate Whether you need realtime update
    */
-  constructor(adapter: AdapterSync<T, any>, defaultData?: T) {
+  constructor(adapter: AdapterSync<T, any>, defaultData?: T, realtimeUpdate = true) {
+    this.realtimeUpdate = realtimeUpdate
     this.adapter = adapter
     if (defaultData !== undefined && typeof defaultData !== 'object')
       throw new Error('Init ConciseDb: data is not an object')
@@ -129,7 +128,7 @@ export class ConciseDbSync<T extends object> {
    */
   private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean {
     Reflect.set(target, props, value, receiver)
-    if (this.adapter.adapterOptions.realtimeUpdate === true)
+    if (this.realtimeUpdate === true)
       this.adapter.write(this._data)
     return true
   }
@@ -153,5 +152,13 @@ export class ConciseDbSync<T extends object> {
    */
   public write(): boolean {
     return this.adapter.write(this._data)
+  }
+
+  /**
+   * To get a copy of data
+   * @returns a copy of data
+   */
+  public getData(): T {
+    return JSON.parse(JSON.stringify(this._data))
   }
 }

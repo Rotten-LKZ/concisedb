@@ -28,7 +28,7 @@ describe('test JSONAdapterSync', () => {
   })
 
   test('write', () => {
-    expect(adapter.write(init)).not.toBeUndefined()
+    expect(adapter.write(init)).toBeTruthy()
   })
 
   test('read', () => {
