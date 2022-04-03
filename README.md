@@ -13,7 +13,7 @@ A database library stores JSON file for Node.js.
 
 [Here](https://github.com/Rotten-LKZ/concisedb/blob/main/update.md) is what updated every version if you want to know.
 
-[API Document](https://v0.concisedb.top/)
+[Homepage](https://www.concisedb.top/) | [Document for v0](https://v0.concisedb.top/) | [Document for v1](https://v1.concisedb.top/)
 
 ## Usage
 
@@ -32,98 +32,365 @@ npm install concisedb
 *This library also supports `TypeScript`*
 
 ```javascript
-const ConciseDb = require('concisedb')
+const ConciseDbSync = require('concisedb').ConciseDbSync
+const JSONAdapterSync = require('concisedb').JSONAdapterSync
 const path = require('path')
 
-// The third argument is Options for the class. 
-// Access https://v0.concisedb.top/ if you wanna know what options can change
-const db = new ConciseDb(path.join(__dirname, 'db.json'), { test: [] })
+const adapter = new JSONAdapterSync({
+  filePath: path.join(__dirname, 'db.json')
+})
 
-db.data.test.push(1) // It will update JSON file automatically by using Proxy
-// So for performance, if you need to change the data many times at once
-// you can use db.getData() to get a copy of data
-// Of course, you can give the class { realtimeUpdate: false } to the third argument
-// to prevent the program from updating the JSON file automatically
+// Adapter, Default data (optional), Whether realtime update is needed (default: true)
+const db = new ConciseDbSync(adapter, { test: [] })
+
+db.data.test.push(1)
 
 console.log(db.data) // Output: { test: [ 1 ] }
+
+// Try modifying the content of db.json
+setTimeout(() => {
+  db.read()
+  console.log(db.data) // Output: Depends on what you modified
+}, 10000)
 ```
 
 ```typescript
-import ConciseDb from 'concisedb'
+import { ConciseDbSync, JSONAdapterSync } from 'concisedb'
 import { join } from 'path'
 
 interface Database {
-  test: number[]
+  test: number[];
+  username: string;
 }
 
-// The third argument is Options for the class. 
-// Access https://v0.concisedb.top/ if you wanna know what options can change
-const db = new ConciseDb<Database>(join(__dirname, 'db.json'), { test: [] })
+const init: Database = {
+  test: [],
+  username: 'John',
+}
 
-db.data.test.push(1) // It will update JSON file automatically by using Proxy
-// So for performance, if you need to change the data many times at once
-// you can use db.getData() to get a copy of data
-// Of course, you can give the class { realtimeUpdate: false } to the third argument
-// to prevent the program from updating the JSON file automatically
+const adapter = new JSONAdapterSync({
+  filePath: join(__dirname, 'db.json')
+})
+
+// Adapter, Default data (optional), Whether realtime update is needed (default: true)
+const db = new ConciseDbSync(adapter, { test: [] })
+
+db.data.test.push(1)
 
 console.log(db.data) // Output: { test: [ 1 ] }
+
+// Try modifying the content of db.json
+setTimeout(() => {
+  db.read()
+  console.log(db.data) // Output: Depends on what you modified
+}, 10000)
 ```
 
-3. Don't worry if you change the type of `T`
+> The data will automatically update to JSON file by using Proxy
+>
+> So you can use `db.getData()` to get a copy of `data` if you need to change the `data` many times at once
 
-  The program will automatically update the content of the JSON file
+3. Don't update automatically
 
-  If the JSON file is exist, the program will compare the content of the JSON file with `data` you give. 
+```javascript
+const ConciseDbSync = require('concisedb').ConciseDbSync
+const JSONAdapterSync = require('concisedb').JSONAdapterSync
+const path = require('path')
 
-  The exist data of the JSON file will take the place of `data` you give
+const adapter = new JSONAdapterSync({
+  filePath: path.join(__dirname, 'db.json')
+})
+// Give false to the third argument
+const db = new ConciseDbSync(adapter, { test: [] }, false)
 
-  and the non-exist data of the JSON file will use the default `data` which you give.
+db.data.test.push(1)
+
+// Use write to update the content to JSON file manully
+db.write()
+```
+
+```typescript
+import { ConciseDbSync, JSONAdapterSync } from 'concisedb'
+import { join } from 'path'
+
+interface Database {
+  test: number[];
+  username: string;
+}
+
+const init: Database = {
+  test: [],
+  username: 'John',
+}
+
+const adapter = new JSONAdapterSync({
+  filePath: join(__dirname, 'db.json')
+})
+// Give false to the third argument
+const db = new ConciseDbSync(adapter, { test: [] }, false)
+
+db.data.test.push(1)
+
+// Use write to update the content to JSON file manully
+db.write()
+```
+
+4. Async APIs
+
+> **`db.getData()` remains a synchronous method**
+
+```javascript
+const ConciseDb = require('concisedb').ConciseDb
+const JSONAdapter = require('concisedb').JSONAdapter
+const path = require('path')
+
+(async () => {
+  const adapter = new JSONAdapter({
+    filePath: path.join(__dirname, 'db.json')
+  })
+  const db = new ConciseDb()
+  // Method db.init should be called after initing the class
+  // And should use await to wait this function complete
+  // Of course, using .than instand of await is okay
+  await db.init(adapter, { test: [] })
+
+  db.data.test.push(1)
+
+  // db.getData() remains a synchronous method
+  console.log(db.data, db.getData()) // Output: { test: [ 1 ] } { test: [ 1 ] }
+
+  // Try modifying the content of db.json
+  setTimeout(async () => {
+    await db.read()
+    console.log(db.data) // Output: Depends on what you modified
+  }, 10000)
+})()
+```
+
+```typescript
+import { ConciseDb, JSONAdapter } from 'concisedb'
+import { join } from 'path'
+
+(async () => {
+  interface Database {
+    test: number[];
+    username: string;
+  }
+
+  const init: Database = {
+    test: [],
+    username: 'John',
+  }
+
+  const adapter = new JSONAdapter({
+    filePath: join(__dirname, 'db.json')
+  })
+  const db = new ConciseDb()
+  // Method db.init should be called after initing the class
+  // And should use await to wait this function complete
+  // Of course, using .than instand of await is okay
+  await db.init<Database>(adapter, init)
+
+  db.data.test.push(1)
+
+  // db.getData() remains a synchronous method
+  console.log(db.data, db.getData()) // Output: { test: [ 1 ] } { test: [ 1 ] }
+
+  // Try modifying the content of db.json
+  setTimeout(async () => {
+    await db.read()
+    console.log(db.data) // Output: Depends on what you modified
+  }, 10000)
+})()
+```
 
 ### Advanced usage
 
-#### Update the data of JSON file manually
+#### Make your own adapter
 
-If you change the content of JSON file and you want to get the latest content, use `db.read()` or `db.readSync()` to get the latest content.
+*Abstract class you need to extends*
 
+- Synchronization
+
+```typescript
+/**
+ * Adapter for synchronous storage
+ */
+export abstract class AdapterSync<T extends object, R> {
+  public adapterOptions: R
+  constructor(adapterOptions: R) {
+    this.adapterOptions = adapterOptions
+  }
+
+  /**
+   * Write data
+   * @param data the data should be written
+   * @returns whether the write is successful
+   */
+  public abstract write(data: T): boolean
+  /**
+   * Read data
+   * @returns
+   *  If you return string, ConciseDb will help you try parsing it to T.
+   *  If you return false, it means there may be something wrong with the storage or non-exist.
+   *  If you return T (typeof T is object), ConciseDb will use it as the data directly.
+   */
+  public abstract read(): T | false | string
+}
+```
+
+- Asynchronization
+
+```typescript
+/**
+ * Adapter for asynchronous storage
+ */
+export abstract class Adapter<T extends object, R> {
+  public adapterOptions: R
+  constructor(adapterOptions: R) {
+    this.adapterOptions = adapterOptions
+  }
+
+  /**
+   * Write data
+   * @param data the data should be written
+   * @returns whether the write is successful
+   */
+  public abstract write(data: T): Promise<boolean>
+  /**
+   * Read data
+   * @returns
+   *  If you return string, ConciseDb will help you try parsing it to T.
+   *  If you return false, it means there may be something wrong with the storage or non-exist.
+   *  If you return T (typeof T is object), ConciseDb will use it as the data directly.
+   */
+  public abstract read(): Promise<T | false | string>
+}
+```
+
+Example: 
+
+- Synchronization
+
+```typescript
+import { AdapterSync } from 'concisedb'
+
+interface TestAdapterSyncOptions {
+  readType: number
+}
+
+/**
+ * Test adapter
+ */
+export default class TestAdapterSync<T extends object> extends AdapterSync<T, TestAdapterSyncOptions> {
+  private _data: T
+  private readType: number
+  constructor(options: TestAdapterSyncOptions, defualtData: T) {
+    super(options)
+    this._data = defualtData
+    this.readType = options.readType
+  }
+
+  public read(): T | false | string {
+    if (this.readType === 1)
+      return false
+    else if (this.readType === 2)
+      return this._data
+    else if (this.readType === 3)
+      return JSON.stringify(this._data)
+    else if (this.readType === 4)
+      return '123'
+    else
+      return false
+  }
+
+  public write(_data: T): boolean {
+    return Math.floor(Math.random() * (264 - 1 + 1) + 1) % 2 === 0
+  }
+}
+```
+
+- Asynchronization
+
+```typescript
+import { Adapter } from 'concisedb'
+
+interface TestAdapterOptions {
+  readType: number
+}
+
+/**
+ * Test adapter
+ */
+export default class TestAdapter<T extends object> extends Adapter<T, TestAdapterOptions> {
+  private _data: T
+  private readType: number
+  constructor(options: TestAdapterOptions, defualtData: T) {
+    super(options)
+    this._data = defualtData
+    this.readType = options.readType
+  }
+
+  public async read(): Promise<T | false | string> {
+    if (this.readType === 1)
+      return false
+    else if (this.readType === 2)
+      return this._data
+    else if (this.readType === 3)
+      return JSON.stringify(this._data)
+    else if (this.readType === 4)
+      return '123'
+    else
+      return false
+  }
+
+  public async write(_data: T): Promise<boolean> {
+    return Math.floor(Math.random() * (264 - 1 + 1) + 1) % 2 === 0
+  }
+}
+```
+
+Synchronization adapters use `ConciseDbSync` to init
+
+Asynchronization adapters use `ConciseDb` to init
+
+## Version choose: v0 and v1
+
+`concisedb` has two main versions now. Below are their example codes.
+
+> *They all support async APIs*
+
+- v0:
 ```javascript
 const ConciseDb = require('concisedb')
 const path = require('path')
 
 const db = new ConciseDb(path.join(__dirname, 'db.json'), { test: [] })
 
-console.log(db.data)
-// Try changing the content of JSON file
-setTimeout(() => {
-  db.readSync()
-  console.log(db.data)
-}, 5000)
-db.read()
+db.data.test.push(1)
+
+console.log(db.data) // Output: { test: [ 1 ] }
+```
+- v1:
+```javascript
+const ConciseDbSync = require('concisedb').ConciseDbSync
+const JSONAdapterSync = require('concisedb').JSONAdapterSync
+const path = require('path')
+
+const adapter = new JSONAdapterSync({
+  filePath: path.join(__dirname, 'db.json')
+})
+
+// Adapter, Default data (optional), Whether realtime update is needed (default: true)
+const db = new ConciseDbSync(adapter, { test: [] })
+
+db.data.test.push(1)
+
+console.log(db.data) // Output: { test: [ 1 ] }
 ```
 
-```typescript
-import ConciseDb from 'concisedb'
-import { join } from 'path'
+So v1 allows you to use `adapter` to store in different places.
 
-interface Database {
-  test: number[]
-}
+However, v0 will still be maintained by the author.
 
-const db = new ConciseDb<Database>(join(__dirname, 'db.json'), { test: [] })
-
-console.log(db.data)
-// Try changing the content of JSON file
-setTimeout(() => {
-  db.readSync()
-  console.log(db.data)
-}, 5000)
-```
-
-### Async and Sync APIs
-
-Here are three APIs and they all support Async
-
-- `db.read()` and `db.readSync()`
-- `db.write()` and `db.writeSync()`
-- `db.updateFile()` and `db.updateFileSync()`
-
-*`db.updateFile()` and `db.updateFileSync()` are declared for compatibility. They are the same as `db.write()` and `db.writeSync()`*
+[View branch v0 on GitHub](https://github.com/Rotten-LKZ/concisedb/tree/v0)

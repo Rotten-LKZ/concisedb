@@ -119,7 +119,9 @@ export class ConciseDb<T extends object> {
    * @param data data
    */
   private updateData(data?: T): void {
-    this.data = deepProxy<T>(data === undefined ? this._data : data, this.dataSet.bind(this))
+    if (data !== undefined)
+      this._data = data
+    this.data = deepProxy<T>(this._data, this.dataSet.bind(this))
   }
 
   /**

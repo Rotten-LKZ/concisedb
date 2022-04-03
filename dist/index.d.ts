@@ -1,48 +1,48 @@
 
+
+// sync.ts
+
 /**
- * The options type for classes
+ * Adapter for synchronous storage
  */
-declare interface Options {
-  /** whether need to update the JSON file after changes */
-  realtimeUpdate?: boolean
+declare abstract class AdapterSync<T extends object, R> {
+  public adapterOptions: R
+  constructor(adapterOptions: R) 
+
+  /**
+   * Write data
+   * @param data the data should be written
+   * @returns whether the write is successful
+   */
+  public abstract write(data: T): boolean
+  /**
+   * Read data
+   * @returns
+   *  If you return string, ConciseDb will help you try parsing it to T.
+   *  If you return false, it means there may be something wrong with the storage or non-exist.
+   *  If you return T (typeof T is object), ConciseDb will use it as the data directly.
+   */
+  public abstract read(): T | false | string
 }
 
-declare class ConciseDb<T extends object> {
-  private readonly filePath: string
-  private readonly options: Options
+declare class ConciseDbSync<T extends object> {
+  private readonly realtimeUpdate: boolean
+  private readonly adapter: AdapterSync<T, any>
   private _data: T
-  public data: T
+  public data!: T
 
   /**
-   * Init this class
-   * @param filePath the path of the JSON file
-   * @param defaultData the default data of the JSON file
-   * @param options Some options of this class
+   * Init ConciseDbSync
+   * @param adapter Adapter
+   * @param defaultData Default data
+   * @param realtimeUpdate Whether you need realtime update
    */
-  constructor(filePath: string, defaultData?: T, options?: Options)
+  constructor(adapter: AdapterSync<T, any>, defaultData?: T, realtimeUpdate = true)
 
   /**
-   * Use Proxy to rebind the data
-   * @param data data
+   * To parse the result of this.adapter.read() to T | false
    */
-  private updateData(data: T): void
-
-  /**
-   * To get the content of the JSON file
-   */
-  private getFileContent(): Promise<T | false>
-
-  /**
-   * To get the content of the JSON file
-   * @returns data or false
-   */
-  private getFileContentSync(): T | false
-
-  /**
-   * This function will run when the data update
-   * @returns boolean
-   */
-  private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean
+  private parseData(): T | false
 
   /**
    * To calculate the differences between the current data (saved in the JSON file) and the new data (user input)
@@ -51,10 +51,97 @@ declare class ConciseDb<T extends object> {
   private calcDiff(data: T, fileContent: T): T
 
   /**
+   * Use Proxy to rebind the data
+   * @param data data
+   */
+  private updateData(data?: T): void
+
+  /**
+   * This function will run when the data update
+   * @returns boolean
+   */
+  private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean
+
+  /**
+   * Update the data from JSON file manually
+   * @returns whether the update is successful
+   */
+  public read(): boolean
+
+  /**
+   * To update the JSON file manually
+   * @returns whether the update is successful
+   */
+  public write(): boolean
+
+  /**
    * To get a copy of data
    * @returns a copy of data
    */
   public getData(): T
+}
+
+// async.ts
+
+/**
+ * Adapter for asynchronous storage
+ */
+declare abstract class Adapter<T extends object, R> {
+  public adapterOptions: R
+  constructor(adapterOptions: R)
+
+  /**
+   * Write data
+   * @param data the data should be written
+   * @returns whether the write is successful
+   */
+  public abstract write(data: T): Promise<boolean>
+  /**
+   * Read data
+   * @returns
+   *  If you return string, ConciseDb will help you try parsing it to T.
+   *  If you return false, it means there may be something wrong with the storage or non-exist.
+   *  If you return T (typeof T is object), ConciseDb will use it as the data directly.
+   */
+  public abstract read(): Promise<T | false | string>
+}
+
+declare class ConciseDb<T extends object> {
+  private realtimeUpdate!: boolean
+  private adapter!: Adapter<T, any>
+  private _data!: T
+  public data!: T
+
+  /**
+   * Init the ConciseDb
+   * @param adapter Adapter
+   * @param defaultData Default data
+   * @param realtimeUpdate Whether you need realtime update
+   */
+  public async init(adapter: Adapter<T, any>, defaultData?: T, realtimeUpdate = true)
+
+  /**
+   * To parse the result of this.adapter.read() to T | false
+   */
+  private async parseData(): Promise<T | false>
+
+  /**
+   * To calculate the differences between the current data (saved in the JSON file) and the new data (user input)
+   * @param data User input data
+   */
+  private calcDiff(data: T, fileContent: T): T
+
+  /**
+   * Use Proxy to rebind the data
+   * @param data data
+   */
+  private updateData(data?: T): void
+
+  /**
+   * This function will run when the data update
+   * @returns boolean
+   */
+  private dataSet(target: T, props: string | symbol, value: any, receiver: any): boolean
 
   /**
    * Update the data from JSON file manually
@@ -63,32 +150,96 @@ declare class ConciseDb<T extends object> {
   public read(): Promise<boolean>
 
   /**
-   * Update the data from JSON file manually
-   * @returns whether the update is successful
-   */
-  public readSync(): boolean
-
-  /**
    * To update the JSON file manually
-   * @returns if this function return true, it means the data is updated successfully
+   * @returns whether the update is successful
    */
   public write(): Promise<boolean>
 
   /**
-   * To update the JSON file manually
+   * To get a copy of data
+   * @returns a copy of data
    */
-  public writeSync(): void
-
-  /**
-   * To update the JSON file manually
-   */
-  public updateFile(): Promise<boolean>
-
-  /**
-   * To update the JSON file manually
-   */
-  public updateFileSync(): void
+  public getData(): T
 }
 
-export default ConciseDb
-export { Options }
+// adapters/JSONAdapter.ts
+
+/**
+ * Options for JSONAdapterSyncOptions
+ */
+declare interface JSONAdapterOptions {
+  /**
+   * Where you require this adapter to store data
+   */
+  filePath: string
+}
+
+declare class JSONAdapter<T extends object> extends Adapter<T, JSONAdapterOptions> {
+  /**
+   * Init the adapter
+   * @param options Options for JSONAdapter
+   */
+  constructor(options: JSONAdapterOptions)
+
+  /**
+   * To get the content of the JSON file
+   * @returns data or false
+   */
+  public read(): Promise<false | T>
+
+  /**
+   * To update the JSON file
+   */
+  public write(data: T): Promise<boolean>
+}
+
+// adapters/JSONAdapterSync.ts
+
+/**
+ * Options for JSONAdapterSyncOptions
+ */
+declare interface JSONAdapterSyncOptions {
+  /**
+   * Where you require this adapter to store data
+   */
+  filePath: string
+}
+
+declare class JSONAdapterSync<T extends object> extends AdapterSync<T, JSONAdapterSyncOptions> {
+  /**
+   * Init the adapter
+   * @param options Options for JSONSyncAdapter
+   */
+  constructor(options: JSONAdapterSyncOptions)
+
+  /**
+   * To get the content of the JSON file
+   * @returns data or false
+   */
+  public read(): false | T
+
+  /**
+   * To update the JSON file
+   */
+  public write(data: T): boolean
+}
+
+export {
+  ConciseDb,
+  ConciseDbSync,
+  Adapter,
+  AdapterSync,
+  JSONAdapterOptions,
+  JSONAdapterSyncOptions,
+  JSONAdapter,
+  JSONAdapterSync,
+}
+
+export default {
+  ConciseDb,
+  ConciseDbSync,
+  Adapter,
+  AdapterSync,
+  JSONAdapter,
+  JSONAdapterSync,
+}

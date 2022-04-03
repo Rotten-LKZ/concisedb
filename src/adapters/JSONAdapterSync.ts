@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { AdapterSync } from '..'
+import { AdapterSync } from '../sync'
 
 /**
  * Options for JSONAdapterSyncOptions
@@ -11,7 +11,7 @@ export interface JSONAdapterSyncOptions {
   filePath: string
 }
 
-export default class JSONSyncAdapter<T extends object> extends AdapterSync<T, JSONAdapterSyncOptions> {
+export default class JSONAdapterSync<T extends object> extends AdapterSync<T, JSONAdapterSyncOptions> {
   /**
    * Init the adapter
    * @param options Options for JSONSyncAdapter

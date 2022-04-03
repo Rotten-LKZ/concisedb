@@ -1,20 +1,12 @@
 
 const path = require('path')
-const fs = require('fs')
-
-function getAllEntryPaths() {
-  const res = {}
-  fs.readdirSync('./src/adapters').forEach((file) => { res[`adapters/${file.replace(/(\.ts)$/, '.js')}`] = `./src/adapters/${file}` })
-  res['index.js'] = './src/index.ts'
-  return res
-}
 
 module.exports = {
-  entry: getAllEntryPaths(),
+  entry: './src/index.ts',
   output: {
     libraryTarget: 'umd',
     libraryExport: 'default',
-    filename: '[name]',
+    filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

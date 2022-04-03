@@ -1,5 +1,5 @@
 
-import { Adapter } from '..'
+import { Adapter } from '../async'
 
 interface TestAdapterOptions {
   readType: number

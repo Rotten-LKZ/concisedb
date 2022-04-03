@@ -1,5 +1,5 @@
 
-import { AdapterSync } from '..'
+import { AdapterSync } from '../sync'
 
 interface TestAdapterSyncOptions {
   readType: number

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { Adapter } from '..'
+import { Adapter } from '../async'
 
 /**
  * Options for JSONAdapterSyncOptions
