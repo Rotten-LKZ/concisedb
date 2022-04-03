@@ -51,19 +51,22 @@ describe('test constructor of async ConciseDb', () => {
 describe('test use of async ConciseDb', () => {
   test('exist data cover default data', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, diff)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.data).toEqual(diff)
   })
 
   test('read data', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, init)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.data).toEqual(init)
   })
 
   test('write data', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, init)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     const newData: Database = {
       name: 'Tom',
       age: 26,
@@ -79,25 +82,29 @@ describe('test use of async ConciseDb', () => {
 
   test('getData()', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, init)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.getData()).toEqual(init)
   })
 
   test('read() true', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, diff)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.read()).resolves.toBeTruthy()
   })
 
   test('read() false', async () => {
     const adapter = new TestAdapter<Database>({ readType: 1 }, diff)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.read()).resolves.toBeFalsy()
   })
 
   test('write()', async () => {
     const adapter = new TestAdapter<Database>({ readType: 2 }, diff)
-    const db = await new ConciseDb().init(adapter, init)
+    const db = new ConciseDb()
+    await db.init(adapter, init)
     expect(db.write()).resolves.not.toBeUndefined()
   })
 })
