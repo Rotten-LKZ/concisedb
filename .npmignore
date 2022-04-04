@@ -5,6 +5,7 @@
 /data
 /.github
 /coverage
+/utils
 yarn.lock
 tsconfig.json
 .eslintrc
