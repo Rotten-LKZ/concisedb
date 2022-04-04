@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/Rotten-LKZ/concisedb/issues"
   },
-  "homepage": "https://github.com/Rotten-LKZ/concisedb#readme",
+  "homepage": "https://www.concisedb.top",
   "devDependencies": {
     "@antfu/eslint-config": "^0.18.9",
     "@types/jest": "^27.4.1",
