@@ -24,7 +24,7 @@ Node.js 存储数据到 JSON 文件的库
 *你可以用其他你喜欢的包管理器如 `yarn` 和 `pnpm` 替代*
 
 ```bash
-npm install concisedb
+npm install concisedb@0.2.3
 ```
 
 2. 示例代码

@@ -24,7 +24,7 @@ A database library stores JSON file for Node.js.
 *You can also use other package managers like `yarn` and `pnpm` instead*
 
 ```bash
-npm install concisedb
+npm install concisedb@0.2.3
 ```
 
 2. Example code
