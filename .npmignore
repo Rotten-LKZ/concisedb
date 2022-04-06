@@ -17,3 +17,4 @@ jest.config.js
 update.md
 typedoc.json
 README-zh-Hans.md
+tsup.config.ts

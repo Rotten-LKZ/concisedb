@@ -1,6 +1,6 @@
 {
   "name": "concisedb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A database library stores JSON file for Node.js.",
   "keywords": [
     "database",
